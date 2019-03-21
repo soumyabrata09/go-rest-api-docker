@@ -56,6 +56,10 @@ func CreatePerson(w http.ResponseWriter, r *http.Request) {
 
 	_ = json.NewDecoder(r.Body).Decode(&personStruct)
 	personStruct.ID = param["id"]
+	personStruct.Firstname = param["fname"]
+	personStruct.Lastname = param["lname"]
+	//personStruct.Address = param["addr"]
+
 	//appending with the slice
 	people = append(people, personStruct)
 	json.NewEncoder(w).Encode(people)
@@ -100,7 +104,7 @@ func main() {
 	//log.Fatal(http.ListenAndServe(":8000", router))
 	router.HandleFunc("/people", GetPeople).Methods("GET")
 	router.HandleFunc("/people/{id}", GetPerson).Methods("GET")
-	router.HandleFunc("/people/{id}", CreatePerson).Methods("POST")
+	router.HandleFunc("/people/{id}/{fname}/{lname}", CreatePerson).Methods("POST")
 	router.HandleFunc("/people/{id}", DeletePerson).Methods("DELETE")
 	router.HandleFunc("/goapi/test", viewHandler).Methods("GET")
 	http.ListenAndServe(":"+PORT, router)
